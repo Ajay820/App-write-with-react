@@ -4,27 +4,32 @@ import { databases } from '../Appwrite/Appwrite'
 
 export const Todos = () => {
 
-  const [todos,setTods] = useState([])
+  const [todos,setTodos] = useState([])
   const [loader,setLoader] = useState(false)
 
-  useEffect(()=>{
-    setLoader(true)
-    const getTodos = databases.listDocuments("64267811418b6d824c6c")
+  // const [output,setOutput] =useState("") 
 
-    getTodos.then(
+
+
+  console.log(todos)
+
+  useEffect(()=>{
+    const response = databases.listDocuments("6427c6d20464df58bf36","6427c6dcd6bc73a91b81")
+
+
+    response.then(
       function (response){
-        setTods(response.documents)
+        setTodos(response.documents)
       },
       function (error){
         console.log(error)
       }
     )
-
-    setLoader(false)
-  })
+  },[])
 
   const deleteasync = async (id) =>{
-   const response = await databases.deleteDocument("64267811418b6d824c6c",id)
+    console.log(id)
+   const response = await databases.deleteDocument("6427c6d20464df58bf36","6427c6dcd6bc73a91b81","id")
    response.then(
     function (response){
       console.log(response)
@@ -44,10 +49,10 @@ export const Todos = () => {
           <p>loading the data please wait</p>
         ):(
           <div>
-            {todos && todos.map((todo)=>(
+            {todos.map((todo)=>(
               <div key={todo.$id}>
                 <div>
-                  <p>item</p>
+                  <p>{todo.todo}</p>
                 </div>
                 <div>
                   <span onClick={()=>deleteasync(todo.$id)}>Delete</span>
